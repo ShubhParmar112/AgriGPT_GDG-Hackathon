@@ -1,0 +1,223 @@
+"""Agronomic reference data for every crop name that can appear in the
+training dataset's "Suggested Crops" column. Used to enrich raw model
+predictions with the detail fields shown on the crop cards.
+"""
+
+CROP_INFO = {
+    "Apple": {
+        "emoji": "🍎", "sowing": "January – February (planting)", "harvest": "August – October",
+        "water": "Medium", "climate": "Cold, Temperate", "soil": "Well-drained Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Needs winter chilling below 7°C for good flowering; prune annually for fruit quality.",
+    },
+    "Arecanut": {
+        "emoji": "🌴", "sowing": "June – July", "harvest": "November – February",
+        "water": "High", "climate": "Warm & Humid", "soil": "Laterite, Well-drained",
+        "difficulty": 3, "profitability": 3,
+        "tips": "A long-duration palm crop — keep irrigation consistent through summer months.",
+    },
+    "Bajra": {
+        "emoji": "🌾", "sowing": "June – July", "harvest": "September – October",
+        "water": "Low", "climate": "Hot & Dry", "soil": "Sandy, Alluvial",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Highly drought-tolerant — a reliable choice for low-rainfall regions.",
+    },
+    "Barley": {
+        "emoji": "🌿", "sowing": "October – November", "harvest": "March – April",
+        "water": "Low", "climate": "Cool & Dry", "soil": "Loamy, Alluvial",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Tolerates mild soil salinity better than wheat — a good rotation crop.",
+    },
+    "Cardamom": {
+        "emoji": "🌱", "sowing": "May – June", "harvest": "October – February",
+        "water": "High", "climate": "Cool & Humid", "soil": "Laterite, Rich Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Grows best under partial shade on hill slopes; avoid waterlogging.",
+    },
+    "Cashew": {
+        "emoji": "🥜", "sowing": "June – August", "harvest": "February – May",
+        "water": "Low", "climate": "Warm, Coastal", "soil": "Laterite, Sandy",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Tolerates poor soils well, making it ideal for coastal laterite belts.",
+    },
+    "Chillies": {
+        "emoji": "🌶️", "sowing": "June – July", "harvest": "October – January",
+        "water": "Medium", "climate": "Warm", "soil": "Alluvial, Well-drained",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Regular picking of ripe pods encourages continuous flowering.",
+    },
+    "Coconut": {
+        "emoji": "🥥", "sowing": "June – July (planting)", "harvest": "Year-round",
+        "water": "High", "climate": "Warm, Coastal", "soil": "Laterite, Sandy Loam",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Needs regular irrigation in the first three years for strong establishment.",
+    },
+    "Coffee": {
+        "emoji": "☕", "sowing": "June – July", "harvest": "November – February",
+        "water": "Medium", "climate": "Cool & Humid, Shade-grown", "soil": "Laterite, Rich Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Grows best under shade trees on well-drained hill slopes.",
+    },
+    "Cotton": {
+        "emoji": "☁️", "sowing": "April – May", "harvest": "October – January",
+        "water": "Medium", "climate": "Warm, Semi-Arid", "soil": "Black, Well-drained",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Watch closely for bollworm and space rows well to improve airflow.",
+    },
+    "Fruits": {
+        "emoji": "🍇", "sowing": "Varies by fruit crop", "harvest": "Varies by fruit crop",
+        "water": "Medium", "climate": "Warm, Varies", "soil": "Well-drained Loamy",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Pick fruit species suited to your local climate zone for the best yield.",
+    },
+    "Ginger": {
+        "emoji": "🫚", "sowing": "April – May", "harvest": "December – January",
+        "water": "Medium", "climate": "Warm & Humid", "soil": "Well-drained Loamy",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Plant on raised beds to prevent rhizome rot from waterlogging.",
+    },
+    "Gram": {
+        "emoji": "🌰", "sowing": "October – November", "harvest": "February – March",
+        "water": "Low", "climate": "Cool & Dry", "soil": "Loamy, Black",
+        "difficulty": 1, "profitability": 2,
+        "tips": "A nitrogen-fixing legume that improves soil fertility for the next crop.",
+    },
+    "Groundnut": {
+        "emoji": "🥜", "sowing": "June – July", "harvest": "October – November",
+        "water": "Low", "climate": "Warm, Dry Spells", "soil": "Sandy Loam, Red",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Gypsum application during flowering improves pod filling.",
+    },
+    "Jowar": {
+        "emoji": "🌾", "sowing": "June – July", "harvest": "October – November",
+        "water": "Low", "climate": "Hot & Dry", "soil": "Black, Well-drained",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Drought-resistant and reliable across semi-arid black soil belts.",
+    },
+    "Jute": {
+        "emoji": "🌿", "sowing": "March – April", "harvest": "July – September",
+        "water": "High", "climate": "Warm & Humid", "soil": "Alluvial, Riverine",
+        "difficulty": 2, "profitability": 2,
+        "tips": "Needs standing water during retting after harvest to separate the fibres.",
+    },
+    "Maize": {
+        "emoji": "🌽", "sowing": "June – July", "harvest": "September – October",
+        "water": "Medium", "climate": "Warm", "soil": "Well-drained Loamy",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Add nitrogen-rich fertilizer at the knee-high stage to boost cob size.",
+    },
+    "Millet": {
+        "emoji": "🌾", "sowing": "June – July", "harvest": "September – October",
+        "water": "Low", "climate": "Hot & Dry", "soil": "Sandy, Red",
+        "difficulty": 1, "profitability": 2,
+        "tips": "One of the most climate-resilient cereals — needs very little irrigation.",
+    },
+    "Mustard": {
+        "emoji": "🌼", "sowing": "October – November", "harvest": "February – March",
+        "water": "Low", "climate": "Cool & Dry", "soil": "Loamy, Alluvial",
+        "difficulty": 1, "profitability": 2,
+        "tips": "A light irrigation at flowering stage greatly improves seed set.",
+    },
+    "Oilseeds": {
+        "emoji": "🌻", "sowing": "October – November", "harvest": "February – March",
+        "water": "Low", "climate": "Cool & Dry", "soil": "Loamy, Alluvial",
+        "difficulty": 2, "profitability": 2,
+        "tips": "Rotate with cereals to break pest cycles and improve soil health.",
+    },
+    "Peas": {
+        "emoji": "🫛", "sowing": "October – November", "harvest": "January – February",
+        "water": "Medium", "climate": "Cool & Dry", "soil": "Loamy, Well-drained",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Stake taller varieties for better pod quality and easier harvesting.",
+    },
+    "Potato": {
+        "emoji": "🥔", "sowing": "October – November", "harvest": "January – February",
+        "water": "Medium", "climate": "Cool", "soil": "Sandy Loam, Well-drained",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Earth-up soil around the stem to protect developing tubers from sunlight.",
+    },
+    "Pulses": {
+        "emoji": "🫘", "sowing": "June – July / October – November", "harvest": "September – November / February – March",
+        "water": "Low", "climate": "Moderate", "soil": "Loamy, Black",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Legumes fix nitrogen naturally — great for soil health in rotation.",
+    },
+    "Ragi": {
+        "emoji": "🌾", "sowing": "June – July", "harvest": "October – November",
+        "water": "Low", "climate": "Warm, Moderate Rain", "soil": "Red, Sandy Loam",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Highly nutritious and hardy — tolerates poor soil fertility well.",
+    },
+    "Red Gram": {
+        "emoji": "🫘", "sowing": "June – July", "harvest": "December – January",
+        "water": "Low", "climate": "Warm, Semi-Arid", "soil": "Black, Red",
+        "difficulty": 2, "profitability": 2,
+        "tips": "A deep-rooted legume that improves soil structure and fertility.",
+    },
+    "Rice": {
+        "emoji": "🌾", "sowing": "June – July", "harvest": "November – December",
+        "water": "High", "climate": "Warm & Humid", "soil": "Clayey, Alluvial",
+        "difficulty": 2, "profitability": 2,
+        "tips": "Keep fields flooded for the first six weeks and use certified seeds.",
+    },
+    "Rubber": {
+        "emoji": "🌳", "sowing": "June – July (planting)", "harvest": "Year-round tapping",
+        "water": "High", "climate": "Warm & Humid", "soil": "Laterite, Well-drained",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Tap early morning when latex flow is highest; avoid tapping in heavy rain.",
+    },
+    "Saffron": {
+        "emoji": "🌸", "sowing": "July – August (corm planting)", "harvest": "October – November",
+        "water": "Low", "climate": "Cold, Dry", "soil": "Well-drained Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Flowers must be hand-picked early morning to preserve stigma quality.",
+    },
+    "Soybean": {
+        "emoji": "🫘", "sowing": "June – July", "harvest": "October – November",
+        "water": "Low", "climate": "Warm, Moderate Rain", "soil": "Black, Well-drained",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Avoid waterlogging — raised beds help in heavy rainfall areas.",
+    },
+    "Spices": {
+        "emoji": "🌶️", "sowing": "Varies by spice crop", "harvest": "Varies by spice crop",
+        "water": "Medium", "climate": "Warm & Humid", "soil": "Laterite, Rich Loamy",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Intercropping with plantation crops like coconut improves land use.",
+    },
+    "Sugarcane": {
+        "emoji": "🎋", "sowing": "February – March", "harvest": "December – March",
+        "water": "High", "climate": "Warm & Humid", "soil": "Alluvial, Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "A long-duration crop — plan irrigation cycles carefully during summer.",
+    },
+    "Tea": {
+        "emoji": "🍵", "sowing": "April – May (planting)", "harvest": "Year-round plucking",
+        "water": "High", "climate": "Cool & Humid", "soil": "Laterite, Acidic Loamy",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Regular plucking of two leaves and a bud keeps bushes productive.",
+    },
+    "Tobacco": {
+        "emoji": "🍂", "sowing": "August – September (nursery)", "harvest": "December – February",
+        "water": "Medium", "climate": "Warm, Dry Spells", "soil": "Sandy Loam, Well-drained",
+        "difficulty": 3, "profitability": 3,
+        "tips": "Requires careful curing after harvest to develop leaf quality and colour.",
+    },
+    "Turmeric": {
+        "emoji": "🟡", "sowing": "April – May", "harvest": "January – March",
+        "water": "Medium", "climate": "Warm & Humid", "soil": "Well-drained Loamy",
+        "difficulty": 2, "profitability": 3,
+        "tips": "Boil, dry and polish rhizomes after harvest to improve market value.",
+    },
+    "Vegetables": {
+        "emoji": "🥦", "sowing": "Varies by vegetable crop", "harvest": "Varies by vegetable crop",
+        "water": "Medium", "climate": "Varies", "soil": "Well-drained Loamy",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Short-duration crops that allow multiple harvests per year in rotation.",
+    },
+    "Wheat": {
+        "emoji": "🌿", "sowing": "October – November", "harvest": "March – April",
+        "water": "Medium", "climate": "Cool & Dry", "soil": "Loamy, Alluvial",
+        "difficulty": 1, "profitability": 2,
+        "tips": "Sow right after the monsoon retreats and irrigate at the crown-root stage.",
+    },
+}

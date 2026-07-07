@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Edit Profile · AgriGPT{% endblock %}
+
+{% block body %}
+
+<header class="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-100 dark:border-slate-700 transition-colors duration-300">
+  <div class="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
+    <a href="{% url 'core:profile' %}" aria-label="Back"
+       class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-deep-green-dark dark:text-light-green hover:bg-light-green/40 dark:hover:bg-slate-700 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <span class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight flex-1">Edit Profile</span>
+    <button type="button" id="theme-toggle" aria-label="Switch to dark mode"
+       class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-gray-400 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 transition">
+      <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+      </svg>
+      <svg class="w-5 h-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="4"/>
+        <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 pt-8 pb-28">
+
+  {% if form.errors %}
+  <div class="space-y-3 mb-6">
+    {% for field in form %}
+      {% for error in field.errors %}
+      <div class="alert-banner alert-error"><span>⚠️</span><span>{{ field.label }}: {{ error }}</span></div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" id="edit-profile-form" class="space-y-6 animate-rise">
+    {% csrf_token %}
+
+    <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 flex flex-col items-center text-center gap-3">
+      <div class="w-24 h-24 rounded-full bg-light-green/50 dark:bg-slate-700 flex items-center justify-center shadow-card overflow-hidden">
+        {% if form.instance.picture %}
+        <img src="{{ form.instance.picture.url }}" alt="" class="w-full h-full object-cover">
+        {% else %}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="1.5" class="w-14 h-14">
+          <circle cx="12" cy="8" r="4"/>
+          <path stroke-linecap="round" d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
+        </svg>
+        {% endif %}
+      </div>
+      <label class="tap-target inline-flex items-center gap-2 px-5 py-2 rounded-full border-2 border-deep-green text-deep-green dark:text-light-green dark:border-light-green font-semibold cursor-pointer hover:bg-light-green/30 dark:hover:bg-slate-700 transition">
+        Change Photo
+        {{ form.picture }}
+      </label>
+    </section>
+
+    <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
+      <div>
+        <label for="{{ form.name.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Name</label>
+        {{ form.name }}
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="{{ form.age.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Age</label>
+          {{ form.age }}
+        </div>
+        <div>
+          <label for="{{ form.gender.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Gender</label>
+          {{ form.gender }}
+        </div>
+      </div>
+      <div>
+        <label for="{{ form.phone.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Phone Number</label>
+        {{ form.phone }}
+      </div>
+    </section>
+
+    <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
+      <div>
+        <label for="{{ form.state.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">State</label>
+        <select name="state" id="{{ form.state.id_for_label }}"
+          class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
+          <option value="" {% if not form.state.value %}selected{% endif %}>Select state</option>
+          {% for state in states %}
+          <option value="{{ state }}" {% if form.state.value == state %}selected{% endif %}>{{ state }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="{{ form.district.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">District</label>
+          {{ form.district }}
+        </div>
+        <div>
+          <label for="{{ form.taluka.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Taluka</label>
+          {{ form.taluka }}
+        </div>
+      </div>
+      <div>
+        <label for="{{ form.village.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Village</label>
+        {{ form.village }}
+      </div>
+      <div>
+        <label for="{{ form.farm_size_acres.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Farm Size (Acres)</label>
+        {{ form.farm_size_acres }}
+      </div>
+    </section>
+
+    <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
+      <div>
+        <label for="{{ form.preferred_language.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Preferred Language</label>
+        <select name="preferred_language" id="{{ form.preferred_language.id_for_label }}"
+          class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
+          <option value="" {% if not form.preferred_language.value %}selected{% endif %}>Select language</option>
+          {% for lang in languages %}
+          <option value="{{ lang }}" {% if form.preferred_language.value == lang %}selected{% endif %}>{{ lang }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="{{ form.default_soil.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Default Soil Type</label>
+        <select name="default_soil" id="{{ form.default_soil.id_for_label }}"
+          class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
+          <option value="" {% if not form.default_soil.value %}selected{% endif %}>Select soil type</option>
+          {% for soil in soil_types %}
+          <option value="{{ soil }}" {% if form.default_soil.value == soil %}selected{% endif %}>{{ soil }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="{{ form.main_crops.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Main Crops</label>
+        {{ form.main_crops }}
+        <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">Separate multiple crops with commas, e.g. Cotton, Soybean, Onion</p>
+      </div>
+    </section>
+  </form>
+</main>
+
+<div class="fixed bottom-0 inset-x-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-gray-100 dark:border-slate-700 p-4 flex gap-3 max-w-4xl mx-auto left-0 right-0 transition-colors duration-300">
+  <a href="{% url 'core:profile' %}"
+    class="tap-target flex-1 flex items-center justify-center text-gray-500 dark:text-gray-300 font-semibold py-4 rounded-full border-2 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+    Cancel
+  </a>
+  <button type="submit" form="edit-profile-form"
+    class="btn-primary tap-target flex-[2] flex items-center justify-center gap-2 text-white text-xl font-bold py-4 rounded-full">
+    Save Changes
+  </button>
+</div>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  #id_name, #id_age, #id_phone, #id_district, #id_taluka, #id_village, #id_farm_size_acres, #id_main_crops {
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid #e5e7eb;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+  #id_name:focus, #id_age:focus, #id_phone:focus, #id_district:focus, #id_taluka:focus, #id_village:focus, #id_farm_size_acres:focus, #id_main_crops:focus {
+    border-color: #2E7D32;
+  }
+  #id_gender {
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid #e5e7eb;
+    background: #fff;
+    outline: none;
+  }
+  #id_picture {
+    display: none;
+  }
+
+  html.dark #id_name, html.dark #id_age, html.dark #id_phone, html.dark #id_district,
+  html.dark #id_taluka, html.dark #id_village, html.dark #id_farm_size_acres, html.dark #id_main_crops,
+  html.dark #id_gender {
+    background: #0f172a;
+    border-color: #475569;
+    color: #f1f5f9;
+  }
+  html.dark #id_name:focus, html.dark #id_age:focus, html.dark #id_phone:focus, html.dark #id_district:focus,
+  html.dark #id_taluka:focus, html.dark #id_village:focus, html.dark #id_farm_size_acres:focus, html.dark #id_main_crops:focus {
+    border-color: #A5D6A7;
+  }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  initThemeToggle();
+</script>
+{% endblock %}

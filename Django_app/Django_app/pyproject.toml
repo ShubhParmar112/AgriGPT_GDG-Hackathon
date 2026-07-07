@@ -1,0 +1,15 @@
+[project]
+name = "django-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "django",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pillow>=12.3.0",
+    "python-dotenv",
+    "scikit-learn>=1.7.2",
+    "tensorflow>=2.21.0",
+]
