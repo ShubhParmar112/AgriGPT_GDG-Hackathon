@@ -1,6 +1,6 @@
-{% load static %}
+{% load static cache_bust %}
 <!DOCTYPE html>
-<html lang="en" class="{% if user.is_authenticated and user.profile.theme == 'dark' %}dark{% endif %}">
+<html lang="{{ CURRENT_LANG }}" data-lang="{{ CURRENT_LANG }}" class="{% if user.is_authenticated and user.profile.theme == 'dark' %}dark{% endif %}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -39,7 +39,7 @@
   };
 </script>
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% cbstatic 'css/style.css' %}">
 {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-soft-beige dark:bg-slate-900 font-sans text-gray-800 dark:text-gray-100 antialiased min-h-screen flex flex-col transition-colors duration-300">
@@ -47,7 +47,9 @@
 
 {% block body %}{% endblock %}
 
-<script src="{% static 'js/main.js' %}"></script>
+<script id="i18n-data" type="application/json">{{ I18N_JSON|safe }}</script>
+<script id="geo-i18n-data" type="application/json">{{ GEO_JSON|safe }}</script>
+<script src="{% cbstatic 'js/main.js' %}"></script>
 {% block extra_scripts %}{% endblock %}
 </body>
 </html>

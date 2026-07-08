@@ -12,6 +12,21 @@ THEME_CHOICES = [
     ("dark", "Dark"),
 ]
 
+LANGUAGE_CHOICES = [
+    ("en", "English"),
+    ("hi", "हिंदी"),
+    ("mr", "मराठी"),
+    ("bn", "বাংলা"),
+    ("te", "తెలుగు"),
+    ("ta", "தமிழ்"),
+    ("gu", "ગુજરાતી"),
+    ("kn", "ಕನ್ನಡ"),
+    ("ml", "മലയാളം"),
+    ("pa", "ਪੰਜਾਬੀ"),
+    ("or", "ଓଡ଼ିଆ"),
+    ("as", "অসমীয়া"),
+]
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
@@ -27,7 +42,7 @@ class Profile(models.Model):
     taluka = models.CharField(max_length=100, blank=True)
     village = models.CharField(max_length=100, blank=True)
     farm_size_acres = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    preferred_language = models.CharField(max_length=50, blank=True)
+    preferred_language = models.CharField(max_length=5, choices=LANGUAGE_CHOICES, default="en")
     default_soil = models.CharField(max_length=50, blank=True)
     main_crops = models.CharField(max_length=255, blank=True, help_text="Comma-separated crop names")
 

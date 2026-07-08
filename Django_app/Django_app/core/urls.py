@@ -13,5 +13,6 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile_page, name='edit_profile'),
     path('recommend/', views.recommend_crops_api, name='recommend'),
     path('theme/', views.set_theme, name='set_theme'),
+    path('language/', views.set_language, name='set_language'),
     path('ask-ai/', views.ask_ai_api, name='ask_ai'),
 ]

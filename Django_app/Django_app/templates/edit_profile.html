@@ -6,14 +6,20 @@
 
 <header class="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-100 dark:border-slate-700 transition-colors duration-300">
   <div class="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
-    <a href="{% url 'core:profile' %}" aria-label="Back"
+    <a href="{% url 'core:profile' %}" data-i18n-aria="back" aria-label="{{ t.back }}"
        class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-deep-green-dark dark:text-light-green hover:bg-light-green/40 dark:hover:bg-slate-700 transition">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
       </svg>
     </a>
-    <span class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight flex-1">Edit Profile</span>
-    <button type="button" id="theme-toggle" aria-label="Switch to dark mode"
+    <span data-i18n="edit_profile_heading" class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight flex-1">{{ t.edit_profile_heading }}</span>
+    <select id="language-select" data-i18n-aria="language_select_label" aria-label="{{ t.language_select_label }}"
+      class="tap-target h-11 rounded-full px-3 text-sm font-semibold border-2 border-transparent text-gray-500 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 bg-transparent outline-none transition">
+      {% for code, name in LANGUAGE_CHOICES %}
+      <option value="{{ code }}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+    <button type="button" id="theme-toggle" data-i18n-aria="theme_toggle_dark" aria-label="{{ t.theme_toggle_dark }}"
        class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-gray-400 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 transition">
       <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
@@ -53,88 +59,87 @@
         {% endif %}
       </div>
       <label class="tap-target inline-flex items-center gap-2 px-5 py-2 rounded-full border-2 border-deep-green text-deep-green dark:text-light-green dark:border-light-green font-semibold cursor-pointer hover:bg-light-green/30 dark:hover:bg-slate-700 transition">
-        Change Photo
+        <span data-i18n="change_photo">{{ t.change_photo }}</span>
         {{ form.picture }}
       </label>
     </section>
 
     <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
       <div>
-        <label for="{{ form.name.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Name</label>
+        <label for="{{ form.name.id_for_label }}" data-i18n="label_name" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.label_name }}</label>
         {{ form.name }}
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="{{ form.age.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Age</label>
+          <label for="{{ form.age.id_for_label }}" data-i18n="profile_age" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_age }}</label>
           {{ form.age }}
         </div>
         <div>
-          <label for="{{ form.gender.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Gender</label>
+          <label for="{{ form.gender.id_for_label }}" data-i18n="profile_gender" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_gender }}</label>
           {{ form.gender }}
         </div>
       </div>
       <div>
-        <label for="{{ form.phone.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Phone Number</label>
+        <label for="{{ form.phone.id_for_label }}" data-i18n="profile_phone" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_phone }}</label>
         {{ form.phone }}
       </div>
     </section>
 
     <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
       <div>
-        <label for="{{ form.state.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">State</label>
-        <select name="state" id="{{ form.state.id_for_label }}"
+        <label for="{{ form.state.id_for_label }}" data-i18n="field_state_label" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.field_state_label }}</label>
+        <select name="state" id="{{ form.state.id_for_label }}" data-i18n-options="states"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" {% if not form.state.value %}selected{% endif %}>Select state</option>
-          {% for state in states %}
-          <option value="{{ state }}" {% if form.state.value == state %}selected{% endif %}>{{ state }}</option>
+          <option value="" data-i18n="select_state_placeholder" {% if not form.state.value %}selected{% endif %}>{{ t.select_state_placeholder }}</option>
+          {% for value, label in states_localized %}
+          <option value="{{ value }}" {% if form.state.value == value %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="{{ form.district.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">District</label>
+          <label for="{{ form.district.id_for_label }}" data-i18n="profile_district" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_district }}</label>
           {{ form.district }}
         </div>
         <div>
-          <label for="{{ form.taluka.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Taluka</label>
+          <label for="{{ form.taluka.id_for_label }}" data-i18n="profile_taluka" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_taluka }}</label>
           {{ form.taluka }}
         </div>
       </div>
       <div>
-        <label for="{{ form.village.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Village</label>
+        <label for="{{ form.village.id_for_label }}" data-i18n="profile_village" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_village }}</label>
         {{ form.village }}
       </div>
       <div>
-        <label for="{{ form.farm_size_acres.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Farm Size (Acres)</label>
+        <label for="{{ form.farm_size_acres.id_for_label }}" data-i18n="label_farm_size_acres" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.label_farm_size_acres }}</label>
         {{ form.farm_size_acres }}
       </div>
     </section>
 
     <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 space-y-5">
       <div>
-        <label for="{{ form.preferred_language.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Preferred Language</label>
+        <label for="{{ form.preferred_language.id_for_label }}" data-i18n="profile_language" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_language }}</label>
         <select name="preferred_language" id="{{ form.preferred_language.id_for_label }}"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" {% if not form.preferred_language.value %}selected{% endif %}>Select language</option>
-          {% for lang in languages %}
-          <option value="{{ lang }}" {% if form.preferred_language.value == lang %}selected{% endif %}>{{ lang }}</option>
+          {% for code, name in LANGUAGE_CHOICES %}
+          <option value="{{ code }}" {% if form.preferred_language.value == code %}selected{% endif %}>{{ name }}</option>
           {% endfor %}
         </select>
       </div>
       <div>
-        <label for="{{ form.default_soil.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Default Soil Type</label>
-        <select name="default_soil" id="{{ form.default_soil.id_for_label }}"
+        <label for="{{ form.default_soil.id_for_label }}" data-i18n="profile_default_soil" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_default_soil }}</label>
+        <select name="default_soil" id="{{ form.default_soil.id_for_label }}" data-i18n-options="soils"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" {% if not form.default_soil.value %}selected{% endif %}>Select soil type</option>
-          {% for soil in soil_types %}
-          <option value="{{ soil }}" {% if form.default_soil.value == soil %}selected{% endif %}>{{ soil }}</option>
+          <option value="" data-i18n="select_soil_placeholder" {% if not form.default_soil.value %}selected{% endif %}>{{ t.select_soil_placeholder }}</option>
+          {% for value, label in soil_types_localized %}
+          <option value="{{ value }}" {% if form.default_soil.value == value %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
       </div>
       <div>
-        <label for="{{ form.main_crops.id_for_label }}" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">Main Crops</label>
+        <label for="{{ form.main_crops.id_for_label }}" data-i18n="profile_main_crops" class="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">{{ t.profile_main_crops }}</label>
         {{ form.main_crops }}
-        <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">Separate multiple crops with commas, e.g. Cotton, Soybean, Onion</p>
+        <p data-i18n="main_crops_hint" class="text-sm text-gray-400 dark:text-gray-500 mt-2">{{ t.main_crops_hint }}</p>
       </div>
     </section>
   </form>
@@ -143,11 +148,11 @@
 <div class="fixed bottom-0 inset-x-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-gray-100 dark:border-slate-700 p-4 flex gap-3 max-w-4xl mx-auto left-0 right-0 transition-colors duration-300">
   <a href="{% url 'core:profile' %}"
     class="tap-target flex-1 flex items-center justify-center text-gray-500 dark:text-gray-300 font-semibold py-4 rounded-full border-2 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-    Cancel
+    <span data-i18n="cancel_btn">{{ t.cancel_btn }}</span>
   </a>
   <button type="submit" form="edit-profile-form"
     class="btn-primary tap-target flex-[2] flex items-center justify-center gap-2 text-white text-xl font-bold py-4 rounded-full">
-    Save Changes
+    <span data-i18n="save_changes_btn">{{ t.save_changes_btn }}</span>
   </button>
 </div>
 
@@ -197,5 +202,6 @@
 {% block extra_scripts %}
 <script>
   initThemeToggle();
+  initLanguageSelector();
 </script>
 {% endblock %}

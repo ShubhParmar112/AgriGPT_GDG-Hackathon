@@ -4,8 +4,12 @@ guardrail keeping the assistant scoped to farming/agriculture — there is
 no separate classifier.
 """
 
+import json
+
 import requests
 from django.conf import settings
+
+from .translations import LANGUAGE_FULL_NAME
 
 GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
 
@@ -35,7 +39,7 @@ class AskAIError(Exception):
     pass
 
 
-def ask_agri_question(messages: list) -> str:
+def ask_agri_question(messages: list, language: str = "en") -> str:
     """messages: [{"role": "user"|"assistant", "content": str}, ...],
     ending with the newest user message. Returns the assistant's reply.
     """
@@ -56,6 +60,18 @@ def ask_agri_question(messages: list) -> str:
     if not api_key:
         raise AskAIError("The Ask AI feature isn't configured yet.")
 
+    system_prompt = SYSTEM_PROMPT
+    language_name = LANGUAGE_FULL_NAME.get(language, "English")
+    # Always state the target language explicitly, even for English —
+    # otherwise, once the conversation history contains a reply in a
+    # different language, the model tends to keep answering in that
+    # language even after the user switches back.
+    system_prompt += (
+        f"\n\nRespond entirely in {language_name}, using simple everyday words, "
+        f"regardless of what language earlier messages in this conversation are in. "
+        f"Do not mix in words from other languages or add parenthetical translations."
+    )
+
     try:
         response = requests.post(
             GROQ_ENDPOINT,
@@ -65,7 +81,7 @@ def ask_agri_question(messages: list) -> str:
             },
             json={
                 "model": settings.GROQ_MODEL,
-                "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + cleaned,
+                "messages": [{"role": "system", "content": system_prompt}] + cleaned,
                 "temperature": 0.4,
                 "max_tokens": 500,
             },
@@ -82,3 +98,74 @@ def ask_agri_question(messages: list) -> str:
         return data["choices"][0]["message"]["content"].strip()
     except (KeyError, IndexError) as exc:
         raise AskAIError("The AI service returned an unexpected response.") from exc
+
+
+def translate_crop_tips(results: list, language: str) -> list:
+    """Translates the free-text fields (crop name, sowing/harvest period,
+    and the cultivation tip) of crop recommendation results into the
+    given language via one batched Groq call. On any failure (missing
+    API key, network error, malformed response) this silently returns
+    the original English results — a translation hiccup should never
+    break crop recommendations.
+
+    The original English "name" is kept as a stable id (used elsewhere
+    to look up emoji/water/difficulty), while the translated name is
+    returned separately as "display_name" for the UI to show instead.
+    """
+    language_name = LANGUAGE_FULL_NAME.get(language)
+    api_key = settings.GROQ_API_KEY
+    if not language_name or language == "en" or not api_key or not results:
+        return results
+
+    fields = [
+        {"name": r["name"], "sowing": r["sowing"], "harvest": r["harvest"], "tips": r["tips"]}
+        for r in results
+    ]
+
+    prompt = (
+        f"Translate this JSON array into {language_name}. For each item, add a "
+        f"\"display_name\" key with the {language_name} translation of \"name\" (the "
+        f"common local name for the crop, not a literal translation), and translate "
+        f"the \"sowing\", \"harvest\", and \"tips\" values in place. Keep the original "
+        f"\"name\" value UNCHANGED so it can still be used as an id, and keep the JSON "
+        f"structure and item order exactly the same. Respond with ONLY the translated "
+        f"JSON array, no other text.\n\n{json.dumps(fields)}"
+    )
+
+    try:
+        response = requests.post(
+            GROQ_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": settings.GROQ_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.2,
+                "max_tokens": 2000,
+            },
+            timeout=20,
+        )
+        response.raise_for_status()
+        content = response.json()["choices"][0]["message"]["content"].strip()
+        content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+        translated = json.loads(content)
+
+        by_name = {item["name"]: item for item in translated if "name" in item}
+        merged = []
+        for r in results:
+            override = by_name.get(r["name"])
+            if override:
+                merged.append({
+                    **r,
+                    "display_name": override.get("display_name", r["name"]),
+                    "sowing": override.get("sowing", r["sowing"]),
+                    "harvest": override.get("harvest", r["harvest"]),
+                    "tips": override.get("tips", r["tips"]),
+                })
+            else:
+                merged.append(r)
+        return merged
+    except Exception:
+        return results

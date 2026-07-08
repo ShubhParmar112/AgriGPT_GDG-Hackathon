@@ -6,14 +6,20 @@
 
 <header class="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-100 dark:border-slate-700 transition-colors duration-300">
   <div class="max-w-4xl mx-auto px-4 py-3 flex items-center gap-3">
-    <a href="{% url 'core:main' %}" aria-label="Back"
+    <a href="{% url 'core:main' %}" data-i18n-aria="back" aria-label="{{ t.back }}"
        class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-deep-green-dark dark:text-light-green hover:bg-light-green/40 dark:hover:bg-slate-700 transition">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
       </svg>
     </a>
-    <span class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight flex-1">My Profile</span>
-    <button type="button" id="theme-toggle" aria-label="Switch to dark mode"
+    <span data-i18n="profile_heading" class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight flex-1">{{ t.profile_heading }}</span>
+    <select id="language-select" data-i18n-aria="language_select_label" aria-label="{{ t.language_select_label }}"
+      class="tap-target h-11 rounded-full px-3 text-sm font-semibold border-2 border-transparent text-gray-500 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 bg-transparent outline-none transition">
+      {% for code, name in LANGUAGE_CHOICES %}
+      <option value="{{ code }}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+    <button type="button" id="theme-toggle" data-i18n-aria="theme_toggle_dark" aria-label="{{ t.theme_toggle_dark }}"
        class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-gray-400 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 transition">
       <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
@@ -62,47 +68,47 @@
   <section class="bg-white dark:bg-slate-800 rounded-3xl shadow-card mt-8 divide-y divide-gray-100 dark:divide-slate-700 animate-rise animate-rise-1">
 
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🎂</span>Age</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🎂</span><span data-i18n="profile_age">{{ t.profile_age }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.age|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🧑</span>Gender</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🧑</span><span data-i18n="profile_gender">{{ t.profile_gender }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.gender|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📞</span>Phone Number</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📞</span><span data-i18n="profile_phone">{{ t.profile_phone }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.phone|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📍</span>State</span>
-      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.state|default:"—" }}</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📍</span><span data-i18n="field_state_label">{{ t.field_state_label }}</span></span>
+      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ state_localized|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🏙️</span>District</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🏙️</span><span data-i18n="profile_district">{{ t.profile_district }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.district|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🗺️</span>Taluka</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🗺️</span><span data-i18n="profile_taluka">{{ t.profile_taluka }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.taluka|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🏡</span>Village</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🏡</span><span data-i18n="profile_village">{{ t.profile_village }}</span></span>
       <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.village|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📐</span>Farm Size</span>
-      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{% if profile.farm_size_acres %}{{ profile.farm_size_acres }} Acres{% else %}—{% endif %}</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">📐</span><span data-i18n="profile_farm_size">{{ t.profile_farm_size }}</span></span>
+      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{% if profile.farm_size_acres %}{{ profile.farm_size_acres }} <span data-i18n="profile_acres_suffix">{{ t.profile_acres_suffix }}</span>{% else %}—{% endif %}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🗣️</span>Preferred Language</span>
-      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.preferred_language|default:"—" }}</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🗣️</span><span data-i18n="profile_language">{{ t.profile_language }}</span></span>
+      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.get_preferred_language_display }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🟫</span>Default Soil Type</span>
-      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ profile.default_soil|default:"—" }}</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🟫</span><span data-i18n="profile_default_soil">{{ t.profile_default_soil }}</span></span>
+      <span class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ default_soil_localized|default:"—" }}</span>
     </div>
     <div class="flex items-center justify-between gap-4 px-6 py-4 flex-wrap">
-      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🌱</span>Main Crops</span>
+      <span class="flex items-center gap-3 text-gray-500 dark:text-gray-400"><span class="text-xl">🌱</span><span data-i18n="profile_main_crops">{{ t.profile_main_crops }}</span></span>
       <span class="flex flex-wrap gap-2 justify-end">
         {% for crop in profile.main_crops_list %}
         <span class="text-sm font-semibold px-3 py-1 rounded-full bg-light-green/50 text-deep-green-dark dark:bg-slate-700 dark:text-light-green">{{ crop }}</span>
@@ -120,7 +126,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5Z"/>
     </svg>
-    Edit Profile
+    <span data-i18n="profile_edit_btn">{{ t.profile_edit_btn }}</span>
   </a>
 </div>
 
@@ -129,5 +135,6 @@
 {% block extra_scripts %}
 <script>
   initThemeToggle();
+  initLanguageSelector();
 </script>
 {% endblock %}

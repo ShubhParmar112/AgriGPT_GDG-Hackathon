@@ -17,7 +17,13 @@
       <span class="text-xl font-extrabold text-deep-green-dark dark:text-light-green tracking-tight">AgriGPT</span>
     </a>
     <div class="flex items-center gap-2">
-      <button type="button" id="theme-toggle" aria-label="Switch to dark mode"
+      <select id="language-select" data-i18n-aria="language_select_label" aria-label="{{ t.language_select_label }}"
+        class="tap-target h-11 rounded-full px-3 text-sm font-semibold border-2 border-transparent text-gray-500 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 bg-transparent outline-none transition">
+        {% for code, name in LANGUAGE_CHOICES %}
+        <option value="{{ code }}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+      <button type="button" id="theme-toggle" data-i18n-aria="theme_toggle_dark" aria-label="{{ t.theme_toggle_dark }}"
          class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-gray-400 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 transition">
         <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
@@ -27,14 +33,18 @@
           <path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
         </svg>
       </button>
-      <a href="{% url 'core:profile' %}" aria-label="My Profile"
-         class="tap-target w-11 h-11 rounded-full bg-light-green/50 flex items-center justify-center text-deep-green-dark hover:bg-light-green dark:bg-slate-700 dark:text-light-green dark:hover:bg-slate-600 transition">
+      <a href="{% url 'core:profile' %}" data-i18n-aria="nav_profile" aria-label="{{ t.nav_profile }}"
+         class="tap-target w-11 h-11 rounded-full bg-light-green/50 flex items-center justify-center text-deep-green-dark hover:bg-light-green dark:bg-slate-700 dark:text-light-green dark:hover:bg-slate-600 transition overflow-hidden">
+        {% if profile.picture %}
+        <img src="{{ profile.picture.url }}" alt="" class="w-full h-full object-cover">
+        {% else %}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
           <circle cx="12" cy="8" r="4"/>
           <path stroke-linecap="round" d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
         </svg>
+        {% endif %}
       </a>
-      <a href="{% url 'core:logout' %}" aria-label="Logout"
+      <a href="{% url 'core:logout' %}" data-i18n-aria="nav_logout" aria-label="{{ t.nav_logout }}"
          class="tap-target w-11 h-11 rounded-full flex items-center justify-center text-gray-400 hover:text-deep-green-dark hover:bg-light-green/40 dark:text-gray-300 dark:hover:text-light-green dark:hover:bg-slate-700 transition">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
@@ -49,11 +59,11 @@
   <div class="ambient-glow w-[32rem] h-[32rem] -top-40 left-1/2 -translate-x-1/2"></div>
 
   <section class="relative z-10 text-center px-4 pt-12 pb-4 max-w-3xl mx-auto animate-rise">
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-deep-green-dark dark:text-light-green leading-tight tracking-tight">
-      Find the Best Crops for Your Farm
+    <h1 data-i18n="hero_title" class="text-3xl sm:text-4xl font-extrabold text-deep-green-dark dark:text-light-green leading-tight tracking-tight">
+      {{ t.hero_title }}
     </h1>
-    <p class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 mt-3">
-      Select your farm details to discover suitable crops.
+    <p data-i18n="hero_subtitle" class="text-lg sm:text-xl text-gray-500 dark:text-gray-400 mt-3">
+      {{ t.hero_subtitle }}
     </p>
   </section>
 
@@ -63,36 +73,36 @@
 
       <div class="card-interactive bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 flex flex-col items-center text-center gap-3 border-2 border-transparent focus-within:border-deep-green dark:focus-within:border-light-green animate-rise animate-rise-1">
         <div class="w-16 h-16 rounded-full bg-light-green/40 dark:bg-slate-700 flex items-center justify-center text-3xl">📍</div>
-        <label for="state" class="text-xl font-semibold text-gray-700 dark:text-gray-200">State</label>
-        <select id="state" name="state" required
+        <label for="state" data-i18n="field_state_label" class="text-xl font-semibold text-gray-700 dark:text-gray-200">{{ t.field_state_label }}</label>
+        <select id="state" name="state" required data-i18n-options="states"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" selected disabled>Choose your state</option>
-          {% for state in states %}
-          <option value="{{ state }}">{{ state }}</option>
+          <option value="" selected disabled data-i18n="field_state_placeholder">{{ t.field_state_placeholder }}</option>
+          {% for value, label in states_localized %}
+          <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="card-interactive bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 flex flex-col items-center text-center gap-3 border-2 border-transparent focus-within:border-deep-green dark:focus-within:border-light-green animate-rise animate-rise-2">
         <div class="w-16 h-16 rounded-full bg-light-green/40 dark:bg-slate-700 flex items-center justify-center text-3xl">🌾</div>
-        <label for="soil" class="text-xl font-semibold text-gray-700 dark:text-gray-200">Soil Type</label>
-        <select id="soil" name="soil" required
+        <label for="soil" data-i18n="field_soil_label" class="text-xl font-semibold text-gray-700 dark:text-gray-200">{{ t.field_soil_label }}</label>
+        <select id="soil" name="soil" required data-i18n-options="soils"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" selected disabled>Choose your soil</option>
-          {% for soil in soil_types %}
-          <option value="{{ soil }}">{{ soil }}</option>
+          <option value="" selected disabled data-i18n="field_soil_placeholder">{{ t.field_soil_placeholder }}</option>
+          {% for value, label in soil_types_localized %}
+          <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
       </div>
 
       <div class="card-interactive bg-white dark:bg-slate-800 rounded-3xl shadow-card p-6 flex flex-col items-center text-center gap-3 border-2 border-transparent focus-within:border-deep-green dark:focus-within:border-light-green animate-rise animate-rise-3">
         <div class="w-16 h-16 rounded-full bg-light-green/40 dark:bg-slate-700 flex items-center justify-center text-3xl">🌦️</div>
-        <label for="season" class="text-xl font-semibold text-gray-700 dark:text-gray-200">Season</label>
-        <select id="season" name="season" required
+        <label for="season" data-i18n="field_season_label" class="text-xl font-semibold text-gray-700 dark:text-gray-200">{{ t.field_season_label }}</label>
+        <select id="season" name="season" required data-i18n-options="seasons"
           class="field-select tap-target w-full text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
-          <option value="" selected disabled>Choose the season</option>
-          {% for season in seasons %}
-          <option value="{{ season }}">{{ season }}</option>
+          <option value="" selected disabled data-i18n="field_season_placeholder">{{ t.field_season_placeholder }}</option>
+          {% for value, label in seasons_localized %}
+          <option value="{{ value }}">{{ label }}</option>
           {% endfor %}
         </select>
       </div>
@@ -102,15 +112,15 @@
         <button type="submit" id="recommend-btn"
           class="btn-primary tap-target w-full sm:max-w-md flex items-center justify-center gap-3 text-white text-xl sm:text-2xl font-bold py-5 rounded-full">
           <span id="recommend-btn-icon">🌱</span>
-          <span id="recommend-btn-label">Recommend Crops</span>
+          <span id="recommend-btn-label" data-i18n="recommend_btn_label">{{ t.recommend_btn_label }}</span>
         </button>
       </div>
     </form>
   </section>
 
   <section id="results-section" class="relative z-10 hidden max-w-6xl mx-auto px-4 mt-14 pb-4">
-    <h2 class="text-2xl sm:text-3xl font-extrabold text-deep-green-dark dark:text-light-green text-center mb-8 tracking-tight">
-      Recommended Crops
+    <h2 data-i18n="results_heading" class="text-2xl sm:text-3xl font-extrabold text-deep-green-dark dark:text-light-green text-center mb-8 tracking-tight">
+      {{ t.results_heading }}
     </h2>
     <div id="crop-results-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
@@ -128,8 +138,8 @@
         AgriMitra
       </h2>
     </div>
-    <p class="text-center text-gray-500 dark:text-gray-400 mb-6">
-      Have a farming question? Ask in your own words.
+    <p data-i18n="agrimitra_subtitle" class="text-center text-gray-500 dark:text-gray-400 mb-6">
+      {{ t.agrimitra_subtitle }}
     </p>
 
     <div id="ask-ai-user-initial" class="hidden" data-initial="{{ request.user.profile.name|default:request.user.email|first|upper }}"></div>
@@ -137,14 +147,14 @@
     <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-card overflow-hidden flex flex-col">
       <div id="ask-ai-log" class="overflow-y-auto scrollbar-thin p-5 space-y-4" style="max-height: 26rem; min-height: 12rem;">
         <div id="ask-ai-chips" class="flex flex-wrap gap-2 justify-center">
-          <button type="button" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
-            How much water does rice need?
+          <button type="button" data-i18n="chip_1" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
+            {{ t.chip_1 }}
           </button>
-          <button type="button" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
-            Best natural fertilizer for cotton?
+          <button type="button" data-i18n="chip_2" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
+            {{ t.chip_2 }}
           </button>
-          <button type="button" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
-            How to control pests organically?
+          <button type="button" data-i18n="chip_3" class="ask-ai-chip text-sm px-3 py-2 rounded-full bg-light-green/40 dark:bg-slate-700 text-deep-green-dark dark:text-light-green font-medium hover:bg-light-green/70 dark:hover:bg-slate-600 transition">
+            {{ t.chip_3 }}
           </button>
         </div>
       </div>
@@ -152,12 +162,12 @@
       <div class="border-t border-gray-100 dark:border-slate-700 p-4">
         <div id="ask-ai-error" class="alert-banner alert-error hidden mb-3"></div>
         <form id="ask-ai-form" class="flex gap-3">
-          <label for="ask-ai-input" class="sr-only">Ask a farming question</label>
-          <input type="text" id="ask-ai-input" required maxlength="500" placeholder="Ask anything about farming..."
+          <label for="ask-ai-input" data-i18n="ask_ai_input_label" class="sr-only">{{ t.ask_ai_input_label }}</label>
+          <input type="text" id="ask-ai-input" required maxlength="500" data-i18n-placeholder="ask_ai_placeholder" placeholder="{{ t.ask_ai_placeholder }}"
             class="tap-target flex-1 text-lg px-4 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 focus:border-deep-green dark:focus:border-light-green outline-none transition bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-100">
           <button type="submit" id="ask-ai-btn"
             class="btn-primary tap-target flex items-center justify-center gap-2 text-white text-lg font-bold px-6 py-3 rounded-2xl">
-            <span id="ask-ai-btn-label">Send</span>
+            <span id="ask-ai-btn-label" data-i18n="ask_ai_send">{{ t.ask_ai_send }}</span>
           </button>
         </form>
       </div>
@@ -170,6 +180,7 @@
 {% block extra_scripts %}
 <script>
   initThemeToggle();
+  initLanguageSelector();
   initRecommendForm();
   initAskAI();
 </script>
